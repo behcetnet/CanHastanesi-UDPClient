@@ -1,7 +1,7 @@
 ﻿
 namespace MonitorYonetimi
 {
-    partial class Form1
+    partial class fMain
     {
         /// <summary>
         ///  Required designer variable.
@@ -171,7 +171,7 @@ namespace MonitorYonetimi
             this.logs.Size = new System.Drawing.Size(362, 336);
             this.logs.TabIndex = 5;
             // 
-            // Form1
+            // fMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -181,9 +181,9 @@ namespace MonitorYonetimi
             this.Controls.Add(this.bQuery);
             this.Controls.Add(this.bDatabase);
             this.Controls.Add(this.bDevices);
-            this.Name = "Form1";
+            this.Name = "fMain";
             this.Text = "Monitör Yönetimi";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.fMain_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();

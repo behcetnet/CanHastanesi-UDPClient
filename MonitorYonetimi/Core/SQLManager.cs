@@ -15,8 +15,13 @@ namespace MonitorYonetimi.Core
 
         public static List<Doktor> DoktorListesiWithQuery(string queryString)
         {
-            string connectionString = "Data Source=(local);Initial Catalog=Northwind;Integrated Security=true";
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = DBManager.Instance.GetPref("DB_HOST");
+            builder.InitialCatalog = DBManager.Instance.GetPref("DB_NAME");
+            builder.UserID = DBManager.Instance.GetPref("DB_USER");
+            builder.Password = DBManager.Instance.GetPref("DB_PASS");
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
 
@@ -48,8 +53,13 @@ namespace MonitorYonetimi.Core
 
         public static List<Muayene> MuayeneListesiWithQuery(string queryString)
         {
-            string connectionString = "Data Source=(local);Initial Catalog=Northwind;Integrated Security=true";
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = DBManager.Instance.GetPref("DB_HOST");
+            builder.InitialCatalog = DBManager.Instance.GetPref("DB_NAME");
+            builder.UserID = DBManager.Instance.GetPref("DB_USER");
+            builder.Password = DBManager.Instance.GetPref("DB_PASS");
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
 

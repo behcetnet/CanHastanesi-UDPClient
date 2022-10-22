@@ -1,10 +1,5 @@
 ﻿using MonitorYonetimi.Core;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MonitorYonetimi
@@ -25,11 +20,6 @@ namespace MonitorYonetimi
             if (detay.TryGetValue("DB_HOST", out string host))
                 dbs.Host = host;
 
-            if (detay.TryGetValue("DB_PORT", out string port))
-            {
-                dbs.Port = port;
-            }
-
             if (detay.TryGetValue("DB_NAME", out string name))
                 dbs.Name = name;
 
@@ -47,7 +37,6 @@ namespace MonitorYonetimi
             var veri = (DBSetting)propertyGrid1.SelectedObject;
 
             DBManager.Instance.SetPref("DB_HOST", veri.Host);
-            DBManager.Instance.SetPref("DB_PORT", veri.Port);
             DBManager.Instance.SetPref("DB_NAME", veri.Name);
             DBManager.Instance.SetPref("DB_USER", veri.Username);
             DBManager.Instance.SetPref("DB_PASS", veri.Password);

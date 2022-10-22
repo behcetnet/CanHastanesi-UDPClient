@@ -10,11 +10,8 @@ namespace MonitorYonetimi.Core
         [Description("Veritabanı Sağlayıcısını seçmelisiniz"), DisplayName("Sağlayıcı")]
         public DBProvider Provider { get; set; }
 
-        [Description("Veritabanı sunucu adresini giriniz"), DisplayName("Server IP")]
+        [Description("Veritabanı sunucu adresini giriniz. Port girmek isterseniz HOST, PORT şeklinde girmelisiniz."), DisplayName("Server IP")]
         public string Host { get; set; }
-
-        [Description("Veritabanı port numarasını giriniz. Boş bırakırsanız varsayılan Port kullanılır."), DisplayName("Veritabanı Portu")]
-        public string Port { get; set; }
 
         [Description("Veritabanı adını giriniz."), DisplayName("Veritabanı Adı")]
         public string Name { get; set; }
