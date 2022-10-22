@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace udpClient
+namespace MusteriYonetimi.Core
 {
     public class UDPSocket
     {
@@ -18,12 +18,12 @@ namespace udpClient
             public byte[] buffer = new byte[bufSize];
         }
 
-        public void Server(string address, int port)
-        {
-            _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
-            _socket.Bind(new IPEndPoint(IPAddress.Parse(address), port));
-            Receive();
-        }
+        //public void Server(string address, int port)
+        //{
+        //    _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
+        //    _socket.Bind(new IPEndPoint(IPAddress.Parse(address), port));
+        //    Receive();
+        //}
 
         public void Client(string address, int port)
         {
@@ -38,7 +38,7 @@ namespace udpClient
             {
                 State so = (State)ar.AsyncState;
                 int bytes = _socket.EndSend(ar);
-                Console.WriteLine("SEND: {0}, {1}", bytes, text);
+                //Console.WriteLine("SEND: {0}, {1}", bytes, text);
             }, state);
         }
 

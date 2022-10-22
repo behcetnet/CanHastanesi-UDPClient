@@ -10,10 +10,16 @@ namespace udpClient
             while (key != "!")
             {
 
-                UDPSocket c = new UDPSocket();
-                c.Client("127.0.0.1", Convert.ToInt32(key));
-                c.Send("TEST!");
-
+                try
+                {
+                    UDPSocket c = new UDPSocket();
+                    c.Client("192.168.50.57", 4445);
+                    c.Send(key);
+                }
+                catch
+                {
+                    Console.WriteLine("Bağlantı kurulamadı.");
+                }
 
                 key = Console.ReadLine();
             }
