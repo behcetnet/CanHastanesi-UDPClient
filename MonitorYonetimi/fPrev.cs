@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonitorYonetimi.Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,7 +18,8 @@ namespace MonitorYonetimi
 
         public void Sorgu(string cmd)
         {
-            //dataGridView1.DataSource = data;
+            var sonuc = SQLManager.DataTable(cmd);
+            dataGridView1.DataSource = sonuc;
         }
     }
 }

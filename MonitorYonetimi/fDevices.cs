@@ -1,5 +1,6 @@
 ﻿using MonitorYonetimi.Core;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading;
@@ -41,6 +42,9 @@ namespace MonitorYonetimi
             try
             {
                 var doktorlar = SQLManager.DoktorList();
+                //var doktorlar = new List<Doktor>();
+                //doktorlar.Add(new Doktor { DoktorId = 10, DoktorAdi = "BEHT", IP = "" });
+                //doktorlar.Add(new Doktor { DoktorId = 11, DoktorAdi = "CEH", IP = "" });
 
                 // IP Kayıtları üzerine bindirilecek.
                 var doktorMaps = DBManager.Instance.DoktorList();
@@ -55,13 +59,20 @@ namespace MonitorYonetimi
                         .FirstOrDefault();
                 }
 
-                dataGridView1.DataSource = doktorlar;
+                dataGridView1.Invoke(new Action(() =>
+                {
+                    dataGridView1.DataSource = doktorlar;
+                    dataGridView1.Enabled = true;
+                }));
 
-                dataGridView1.Enabled = true;
-                bSave.Enabled = true;
+                bSave.Invoke(new Action(() =>
+                {
+                    bSave.Enabled = true;
+                }));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 Logger("Bir hata oluştu. Veritabanı bağlantısını kontrol ediniz.");
             }
         }
@@ -69,17 +80,42 @@ namespace MonitorYonetimi
         private void bSave_Click(object sender, EventArgs e)
         {
             DBManager.Instance.DoktorTemizle();
-
-            foreach (DataGridViewRow item in dataGridView1.Rows)
+            try
             {
-                string _doktorId = item.Cells[0].Value.ToString();
-                string _doktorAdi = item.Cells[1].Value.ToString();
-                string _IPAdres = item.Cells[2].Value.ToString();
-
-                if (Int32.TryParse(_doktorId, out int _did))
+                foreach (DataGridViewRow item in dataGridView1.Rows)
                 {
-                    DBManager.Instance.DoktorKayit(_did, _doktorAdi, _IPAdres);
+                    string _doktorId = "";
+                    if (item.Cells[0].Value != null)
+                        _doktorId = item.Cells[0].Value.ToString();
+
+                    string _doktorAdi = "";
+                    if (item.Cells[1].Value != null)
+                        _doktorAdi = item.Cells[1].Value.ToString();
+
+                    string _IPAdres = "";
+                    if (item.Cells[2].Value != null)
+                        _IPAdres = item.Cells[2].Value.ToString();
+
+                    if (string.IsNullOrEmpty(_doktorId))
+                        continue;
+
+                    if (Int32.TryParse(_doktorId, out int _did))
+                    {
+                        if (string.IsNullOrEmpty(_doktorAdi))
+                            _doktorAdi = "";
+
+                        if (string.IsNullOrEmpty(_IPAdres))
+                            _IPAdres = "";
+
+                        DBManager.Instance.DoktorKayit(_did, _doktorAdi, _IPAdres);
+                    }
                 }
+
+                MessageBox.Show("Ayarlarınız kaydedildi.");
+            }
+            catch (Exception _ex)
+            {
+                MessageBox.Show(_ex.Message);
             }
         }
     }

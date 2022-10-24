@@ -28,7 +28,7 @@ namespace udpClient
         public void Client(string address, int port)
         {
             _socket.Connect(IPAddress.Parse(address), port);
-            Receive();
+            //Receive();
         }
 
         public void Send(string text)
@@ -40,6 +40,12 @@ namespace udpClient
                 int bytes = _socket.EndSend(ar);
                 Console.WriteLine("SEND: {0}, {1}", bytes, text);
             }, state);
+        }
+
+        public void Disconnect()
+        {
+            _socket.Close();
+            _socket.Dispose();
         }
 
         private void Receive()

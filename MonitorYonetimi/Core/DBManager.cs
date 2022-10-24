@@ -136,7 +136,7 @@ namespace MonitorYonetimi.Core
                 connection.Open();
 
             var command = connection.CreateCommand();
-            command.CommandText = "INSERT DoktorMap (DoktorId, DoktorAdi, IPAdres) VALUES (@Id, @Adi, @Ip)";
+            command.CommandText = "INSERT INTO DoktorMap (DoktorId, DoktorAdi, IPAdres) VALUES (@Id, @Adi, @Ip)";
             command.Parameters.AddWithValue("@Id", DoktorId);
             command.Parameters.AddWithValue("@Adi", DoktorAdi);
             command.Parameters.AddWithValue("@Ip", Ip);

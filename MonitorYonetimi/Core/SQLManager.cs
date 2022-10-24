@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 
@@ -88,6 +89,31 @@ namespace MonitorYonetimi.Core
                 reader.Close();
 
                 return liste;
+            }
+        }
+
+
+        public static DataTable DataTable(string queryString)
+        {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = DBManager.Instance.GetPref("DB_HOST");
+            builder.InitialCatalog = DBManager.Instance.GetPref("DB_NAME");
+            builder.UserID = DBManager.Instance.GetPref("DB_USER");
+            builder.Password = DBManager.Instance.GetPref("DB_PASS");
+
+            DataTable dt = new DataTable();
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+                dt.Load(reader);
+
+                reader.Close();
+
+                return dt;
             }
         }
     }

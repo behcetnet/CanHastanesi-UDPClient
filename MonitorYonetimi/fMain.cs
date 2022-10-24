@@ -73,13 +73,13 @@ namespace MonitorYonetimi
                         String mesaj = String.Format("B;;{0};;{1};;{2};;{3};;E",
                             item.PolkAdi, item.DoktorAdi, item.HastaAdi, item.SiraNo);
 
-                        string hash = sha256(mesaj);
+                       // string hash = sha256(mesaj);
 
-                        bool bExists = keyValuePairs.TryGetValue(item.DoktorId, out string _vk);
-                        if (bExists)
-                        {
-                            if (_vk == hash) continue;
-                        }
+                        //bool bExists = keyValuePairs.TryGetValue(item.DoktorId, out string _vk);
+                        //if (bExists)
+                        //{
+                        //    if (_vk == hash) continue;
+                        //}
 
                         c = new UDPSocket();
                         c.Client(_ipQuery.IP, Port);
@@ -87,10 +87,10 @@ namespace MonitorYonetimi
                         // Mesaj hazırlanacak...
                         c.Send(mesaj);
 
-                        if (bExists)
-                            keyValuePairs.Remove(item.DoktorId);
+                        //if (bExists)
+                        //    keyValuePairs.Remove(item.DoktorId);
 
-                        keyValuePairs.Add(item.DoktorId, hash);
+                        //keyValuePairs.Add(item.DoktorId, hash);
                     }
 
                     #endregion
@@ -109,6 +109,11 @@ namespace MonitorYonetimi
 
             StatusUpdate("Durduruldu");
             Logger("Servis durduruldu.");
+
+            numericUpDown1.Invoke(new Action(() =>
+            {
+                numericUpDown1.Enabled = true;
+            }));
         }
 
         private void bDevices_Click(object sender, EventArgs e)
