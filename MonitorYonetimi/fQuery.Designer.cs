@@ -39,6 +39,7 @@ namespace MonitorYonetimi
             this.bTest2 = new System.Windows.Forms.Button();
             this.bSave2 = new System.Windows.Forms.Button();
             this.qMuayene = new System.Windows.Forms.TextBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -98,6 +99,7 @@ namespace MonitorYonetimi
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.checkBox1);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.bTest2);
             this.groupBox2.Controls.Add(this.bSave2);
@@ -148,6 +150,16 @@ namespace MonitorYonetimi
             this.qMuayene.Size = new System.Drawing.Size(699, 100);
             this.qMuayene.TabIndex = 0;
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(7, 192);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(150, 24);
+            this.checkBox1.TabIndex = 5;
+            this.checkBox1.Text = "Hasta adı gizlensin";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // fQuery
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -182,5 +194,6 @@ namespace MonitorYonetimi
         private System.Windows.Forms.TextBox qMuayene;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }

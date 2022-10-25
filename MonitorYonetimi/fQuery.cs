@@ -20,6 +20,7 @@ namespace MonitorYonetimi
         {
             qDoktor.Text = DBManager.Instance.GetPref("QUERY_DOKTOR");
             qMuayene.Text = DBManager.Instance.GetPref("QUERY_MUAYENE");
+            checkBox1.Checked = DBManager.Instance.GetPref("HASTA_GIZLI") == "on";
         }
 
         private void bSave_Click(object sender, EventArgs e)
@@ -39,6 +40,7 @@ namespace MonitorYonetimi
         private void bSave2_Click(object sender, EventArgs e)
         {
             DBManager.Instance.SetPref("QUERY_MUAYENE", qMuayene.Text);
+            DBManager.Instance.SetPref("HASTA_GIZLI", checkBox1.Checked ? "on" : "off");
             MessageBox.Show("Sorgunuz kaydedildi.");
         }
 

@@ -15,6 +15,8 @@ namespace MonitorYonetimi
         private bool _IsRunning = false;
         private Dictionary<int, string> keyValuePairs = new Dictionary<int, string>();
 
+        private bool _hastaGizli = false;
+
         public fMain()
         {
             InitializeComponent();
@@ -57,6 +59,7 @@ namespace MonitorYonetimi
                     var muayeneListesi = SQLManager.MuayeneList();
 
                     UDPSocket c;
+                    string hastaAdi = "";
                     foreach (var item in muayeneListesi)
                     {
                         var _ipQuery = doktorListesi
@@ -69,11 +72,33 @@ namespace MonitorYonetimi
                         if (string.IsNullOrEmpty(_ipQuery.IP))
                             continue;
 
+                        hastaAdi = "";
+                        if (_hastaGizli)
+                        {
+                            int i = 0;
+                            foreach (Char nm in item.HastaAdi.ToCharArray())
+                            {
+                                if (Char.IsWhiteSpace(nm))
+                                {
+                                    hastaAdi += " ";
+                                    i = 0;
+                                }
+                                else
+                                {
+                                    hastaAdi += (i == 0) ? nm : '*';
+                                    i++;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            hastaAdi = item.HastaAdi;
+                        }
 
                         String mesaj = String.Format("B;;{0};;{1};;{2};;{3};;E",
-                            item.PolkAdi, item.DoktorAdi, item.HastaAdi, item.SiraNo);
+                            item.PolkAdi, item.DoktorAdi, hastaAdi, ""); //item.SiraNo
 
-                       // string hash = sha256(mesaj);
+                        // string hash = sha256(mesaj);
 
                         //bool bExists = keyValuePairs.TryGetValue(item.DoktorId, out string _vk);
                         //if (bExists)
@@ -137,6 +162,10 @@ namespace MonitorYonetimi
         private void bStart_Click(object sender, EventArgs e)
         {
             numericUpDown1.Enabled = false;
+
+            _hastaGizli = DBManager.Instance.GetPref("HASTA_GIZLI") == "on";
+            if (_hastaGizli)
+                Logger("Hasta adı gizli şekilde ekranlara yansıtılacaktır.");
 
             if (_IsRunning == false)
             {

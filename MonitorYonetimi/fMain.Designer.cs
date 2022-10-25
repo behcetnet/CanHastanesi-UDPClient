@@ -95,7 +95,7 @@ namespace MonitorYonetimi
             // 
             // bStop
             // 
-            this.bStop.Location = new System.Drawing.Point(96, 92);
+            this.bStop.Location = new System.Drawing.Point(96, 91);
             this.bStop.Name = "bStop";
             this.bStop.Size = new System.Drawing.Size(83, 34);
             this.bStop.TabIndex = 4;
@@ -132,7 +132,7 @@ namespace MonitorYonetimi
             0,
             0});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(132, 27);
+            this.numericUpDown1.Size = new System.Drawing.Size(119, 27);
             this.numericUpDown1.TabIndex = 1;
             this.numericUpDown1.Value = new decimal(new int[] {
             3,
