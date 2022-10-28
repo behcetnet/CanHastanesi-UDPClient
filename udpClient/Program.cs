@@ -10,12 +10,18 @@ namespace udpClient
             string key = "27000";
 
             Console.WriteLine("Ekran IP'sini yazın: ");
-            string ipAdres = Console.ReadLine();
+            string ipAdres = "192.168.131.101"; //Console.ReadLine();
             try
             {
-                UDPSocket c = new UDPSocket();
-                c.Client(ipAdres, 4445);
-                c.Send("B;;FİZİK TEDAVİ POL 2;;UZM. DR. AHMET CAMCI;;ZEYNEL DENİZ CAN;;SIRA NO: 99;;E");
+                for (int i = 0; i < 1000; i++)
+                {
+
+                    UDPSocket c = new UDPSocket();
+                    c.Client(ipAdres, 4445);
+                    c.Send($"B;;FİZİK TEDAVİ POL 2;;UZM. DR. AHMET CAMCI;;ZEYNEL DENİZ CAN;;SIRA NO: {i};;E");
+
+                    Thread.Sleep(5000);
+                }
             }
             catch
             {
