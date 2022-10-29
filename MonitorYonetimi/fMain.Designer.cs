@@ -62,7 +62,7 @@ namespace MonitorYonetimi
             this.bDatabase.Name = "bDatabase";
             this.bDatabase.Size = new System.Drawing.Size(140, 41);
             this.bDatabase.TabIndex = 1;
-            this.bDatabase.Text = "Veritabanı Ayarları";
+            this.bDatabase.Text = "Tanımlamalar";
             this.bDatabase.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.bDatabase.UseVisualStyleBackColor = true;
             this.bDatabase.Click += new System.EventHandler(this.bDatabase_Click);
@@ -183,6 +183,7 @@ namespace MonitorYonetimi
             this.Controls.Add(this.bDevices);
             this.Name = "fMain";
             this.Text = "Monitör Yönetimi";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.fMain_FormClosing);
             this.Load += new System.EventHandler(this.fMain_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

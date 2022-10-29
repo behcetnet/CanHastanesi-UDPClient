@@ -11,5 +11,6 @@ namespace MonitorYonetimi.Core
         public string DoktorAdi { get; set; }
         public string HastaAdi { get; set; }
         public string PolkAdi { get; set; }
+        public string Mesaj { get; set; }
     }
 }

@@ -13,9 +13,10 @@ namespace MonitorYonetimi
     public partial class fMain : Form
     {
         private bool _IsRunning = false;
-        private Dictionary<int, string> keyValuePairs = new Dictionary<int, string>();
+        private List<Doktor> doktorListesi = new List<Doktor>();
 
         private bool _hastaGizli = false;
+        private string _genelMesaj = "";
 
         public fMain()
         {
@@ -31,6 +32,15 @@ namespace MonitorYonetimi
             if (decimal.TryParse(value, out decimal v))
             {
                 numericUpDown1.Value = v;
+            }
+        }
+
+        private void fMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_IsRunning)
+            {
+                MessageBox.Show("Öncelikle Servisi Durdurmalısınız.");
+                e.Cancel = true;
             }
         }
 
@@ -54,7 +64,6 @@ namespace MonitorYonetimi
 
                     int Port = 4445;
 
-                    var doktorListesi = DBManager.Instance.DoktorList();
                     var muayeneListesi = SQLManager.MuayeneList();
 
                     UDPSocket c;
@@ -70,6 +79,7 @@ namespace MonitorYonetimi
                         if (string.IsNullOrEmpty(item.IP))
                             continue;
 
+
                         var muayene = muayeneListesi
                                            .Where(t => t.DoktorId == item.DoktorId)
                                            .FirstOrDefault();
@@ -78,6 +88,16 @@ namespace MonitorYonetimi
                         doktorAdi = item.DoktorAdi;
                         hastaAdi = "";
                         muayeneSira = "";
+
+                        if (string.IsNullOrEmpty(muayene.Mesaj) == false)
+                            ekMesaj = muayene.Mesaj;
+                        else
+                        {
+                            if (string.IsNullOrEmpty(item.Detay) == false)
+                                ekMesaj = item.Detay;
+                            else
+                                ekMesaj = _genelMesaj;
+                        }
 
                         if (muayene != null)
                         {
@@ -107,7 +127,7 @@ namespace MonitorYonetimi
                             muayeneSira = muayene.SiraNo.ToString();
                         }
 
-                        string mesaj = String.Format("B;;{0};;{1};;{2};;SIRA NO: {3};;{4};E",
+                        string mesaj = String.Format("B;;{0};;{1};;{2};;SIRA NO: {3};;{4};;E",
                             bolumAdi, doktorAdi, hastaAdi, muayeneSira, ekMesaj);
 
                         c = new UDPSocket();
@@ -124,7 +144,7 @@ namespace MonitorYonetimi
 
                     Thread.Sleep((int)numericUpDown1.Value * 1000);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     Logger("Sorgulama yapılamadı. Bir sorun oluştu..");
                 }
@@ -148,7 +168,7 @@ namespace MonitorYonetimi
 
         private void bDatabase_Click(object sender, EventArgs e)
         {
-            fDatabase f = new fDatabase();
+            fParameters f = new fParameters();
             f.ShowDialog();
         }
 
@@ -161,10 +181,7 @@ namespace MonitorYonetimi
         private void bStart_Click(object sender, EventArgs e)
         {
             numericUpDown1.Enabled = false;
-
-            _hastaGizli = DBManager.Instance.GetPref("HASTA_GIZLI") == "on";
-            if (_hastaGizli)
-                Logger("Hasta adı gizli şekilde ekranlara yansıtılacaktır.");
+            LoadDefinitions();
 
             if (_IsRunning == false)
             {
@@ -238,5 +255,16 @@ namespace MonitorYonetimi
             }
             return hash;
         }
+
+        void LoadDefinitions()
+        {
+            doktorListesi = DBManager.Instance.DoktorList();
+            _genelMesaj = DBManager.Instance.GetPref("GENEL_MESAJ");
+            _hastaGizli = DBManager.Instance.GetPref("HASTA_GIZLI") == "on";
+            if (_hastaGizli)
+                Logger("Hasta adı gizli şekilde ekranlara yansıtılacaktır.");
+        }
+
+
     }
 }

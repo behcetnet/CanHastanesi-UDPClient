@@ -1,7 +1,7 @@
 ﻿
 namespace MonitorYonetimi
 {
-    partial class fDatabase
+    partial class fParameters
     {
         /// <summary>
         /// Required designer variable.
