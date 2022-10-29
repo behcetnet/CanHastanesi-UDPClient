@@ -37,9 +37,21 @@ namespace MonitorYonetimi.Core
                     int i2 = reader.GetOrdinal("DoktorAdi");
                     int i3 = reader.GetOrdinal("BolumAdi");
 
-                    liste.Add(Doktor.Make(
-                        reader.GetInt32(i1), reader.GetString(i2), reader.GetString(i3), ""
-                        ));
+
+                    Doktor d = new Doktor();
+                    d.DoktorId = reader.GetInt32(i1);
+
+                    if (reader.IsDBNull(i2) == false)
+                        d.DoktorAdi = reader.GetString(i2);
+                    else
+                        d.DoktorAdi = "";
+
+                    if (reader.IsDBNull(i3) == false)
+                        d.BolumAdi = reader.GetString(i3);
+                    else
+                        d.BolumAdi = "";
+
+                    liste.Add(d);
                 }
                 reader.Close();
 
@@ -77,13 +89,23 @@ namespace MonitorYonetimi.Core
                     int i3 = reader.GetOrdinal("DoktorAdi");
                     int i4 = reader.GetOrdinal("HastaAdi");
                     int i5 = reader.GetOrdinal("PolkAdi");
+                    int i6 = reader.GetOrdinal("Mesaj");
 
                     Muayene item = new Muayene();
                     item.DoktorId = reader.GetInt32(i1);
                     item.SiraNo = reader.GetInt32(i2);
-                    item.DoktorAdi = reader.GetString(i3);
-                    item.HastaAdi = reader.GetString(i4);
-                    item.PolkAdi = reader.GetString(i5);
+
+                    if (reader.IsDBNull(i3) == false)
+                        item.DoktorAdi = reader.GetString(i3);
+
+                    if (reader.IsDBNull(i4) == false)
+                        item.HastaAdi = reader.GetString(i4);
+
+                    if (reader.IsDBNull(i5) == false)
+                        item.PolkAdi = reader.GetString(i5);
+
+                    if (reader.IsDBNull(i6) == false)
+                        item.Mesaj = reader.GetString(i6);
 
                     liste.Add(item);
                 }

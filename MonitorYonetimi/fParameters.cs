@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 namespace MonitorYonetimi
 {
-    public partial class fDatabase : Form
+    public partial class fParameters : Form
     {
-        public fDatabase()
+        public fParameters()
         {
             InitializeComponent();
         }
@@ -15,7 +15,7 @@ namespace MonitorYonetimi
         {
             var detay = DBManager.Instance.GetPrefs();
 
-            DBSetting dbs = new DBSetting();
+            MiscParameter dbs = new MiscParameter();
             dbs.Provider = DBProvider.MSSQL;
             if (detay.TryGetValue("DB_HOST", out string host))
                 dbs.Host = host;
@@ -29,17 +29,22 @@ namespace MonitorYonetimi
             if (detay.TryGetValue("DB_PASS", out string pass))
                 dbs.Password = pass;
 
+            if (detay.TryGetValue("GENEL_MESAJ", out string msg))
+                dbs.CommonMessage = msg;
+
             propertyGrid1.SelectedObject = dbs;
         }
 
         private void bSave_Click(object sender, EventArgs e)
         {
-            var veri = (DBSetting)propertyGrid1.SelectedObject;
+            var veri = (MiscParameter)propertyGrid1.SelectedObject;
 
             DBManager.Instance.SetPref("DB_HOST", veri.Host);
             DBManager.Instance.SetPref("DB_NAME", veri.Name);
             DBManager.Instance.SetPref("DB_USER", veri.Username);
             DBManager.Instance.SetPref("DB_PASS", veri.Password);
+
+            DBManager.Instance.SetPref("GENEL_MESAJ", veri.CommonMessage);
 
             MessageBox.Show("Ayarlarınız kaydedildi.");
         }

@@ -57,6 +57,11 @@ namespace MonitorYonetimi
                         .Where(t => t.DoktorId == item.DoktorId)
                         .Select(t => t.IP)
                         .FirstOrDefault();
+
+                    item.Detay = doktorMaps
+                        .Where(t => t.DoktorId == item.DoktorId)
+                        .Select(t => t.Detay)
+                        .FirstOrDefault();
                 }
 
                 dataGridView1.Invoke(new Action(() =>
@@ -69,6 +74,8 @@ namespace MonitorYonetimi
                 {
                     bSave.Enabled = true;
                 }));
+
+                Logger("");
             }
             catch (Exception ex)
             {
@@ -92,13 +99,17 @@ namespace MonitorYonetimi
                     if (item.Cells[1].Value != null)
                         _doktorAdi = item.Cells[1].Value.ToString();
 
-                    string _bolumAdi = "";
-                    if (item.Cells[2].Value != null)
-                        _bolumAdi = item.Cells[1].Value.ToString();
-
                     string _IPAdres = "";
-                    if (item.Cells[3].Value != null)
+                    if (item.Cells[2].Value != null)
                         _IPAdres = item.Cells[2].Value.ToString();
+
+                    string _bolumAdi = "";
+                    if (item.Cells[3].Value != null)
+                        _bolumAdi = item.Cells[3].Value.ToString();
+
+                    string _Mesaj = "";
+                    if (item.Cells[4].Value != null)
+                        _Mesaj = item.Cells[4].Value.ToString();
 
                     if (string.IsNullOrEmpty(_doktorId))
                         continue;
@@ -111,7 +122,7 @@ namespace MonitorYonetimi
                         if (string.IsNullOrEmpty(_IPAdres))
                             _IPAdres = "";
 
-                        DBManager.Instance.DoktorKayit(_did, _doktorAdi, _bolumAdi, _IPAdres);
+                        DBManager.Instance.DoktorKayit(_did, _doktorAdi, _bolumAdi, _IPAdres, _Mesaj);
                     }
                 }
 

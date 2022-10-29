@@ -13,9 +13,10 @@ namespace MonitorYonetimi
     public partial class fMain : Form
     {
         private bool _IsRunning = false;
-        private Dictionary<int, string> keyValuePairs = new Dictionary<int, string>();
+        private List<Doktor> doktorListesi = new List<Doktor>();
 
         private bool _hastaGizli = false;
+        private string _genelMesaj = "";
 
         public fMain()
         {
@@ -34,11 +35,22 @@ namespace MonitorYonetimi
             }
         }
 
+        private void fMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_IsRunning)
+            {
+                MessageBox.Show("Öncelikle Servisi Durdurmalısınız.");
+                e.Cancel = true;
+            }
+        }
+
         void mesajGonder()
         {
             Thread th = new Thread(ProjeStart);
             th.Start();
         }
+
+        Dictionary<int, int> kontrol = new Dictionary<int, int>();
 
         public void ProjeStart()
         {
@@ -54,7 +66,6 @@ namespace MonitorYonetimi
 
                     int Port = 4445;
 
-                    var doktorListesi = DBManager.Instance.DoktorList();
                     var muayeneListesi = SQLManager.MuayeneList();
 
                     UDPSocket c;
@@ -70,9 +81,11 @@ namespace MonitorYonetimi
                         if (string.IsNullOrEmpty(item.IP))
                             continue;
 
+
                         var muayene = muayeneListesi
                                            .Where(t => t.DoktorId == item.DoktorId)
                                            .FirstOrDefault();
+
 
                         bolumAdi = item.BolumAdi;
                         doktorAdi = item.DoktorAdi;
@@ -104,17 +117,42 @@ namespace MonitorYonetimi
                                 hastaAdi = muayene.HastaAdi;
                             }
 
-                            muayeneSira = muayene.SiraNo.ToString();
+                            muayeneSira = string.Format("SIRA NO: {0}", muayene.SiraNo);
+                            ekMesaj = muayene.Mesaj;
                         }
 
-                        string mesaj = String.Format("B;;{0};;{1};;{2};;SIRA NO: {3};;{4};E",
+                        if (string.IsNullOrEmpty(ekMesaj))
+                        {
+                            if (string.IsNullOrEmpty(item.Detay) == false)
+                                ekMesaj = item.Detay;
+                            else
+                                ekMesaj = _genelMesaj;
+                        }
+
+                        string mesaj = String.Format("B;;{0};;{1};;{2};;{3};;{4};;E",
                             bolumAdi, doktorAdi, hastaAdi, muayeneSira, ekMesaj);
+
+                        #region mesja tekrar kontrolü
+                        int hash = mesaj.GetHashCode();
+                        if (kontrol.TryGetValue(item.DoktorId, out int mhash))
+                        {
+                            if (hash == mhash)
+                                continue;
+                        }
+                        #endregion
 
                         c = new UDPSocket();
                         c.Client(item.IP, Port);
 
                         // Mesaj hazırlanacak...
                         c.Send(mesaj);
+
+                        #region mesaj tekrar kontrolü
+                        if (kontrol.ContainsKey(item.DoktorId))
+                            kontrol[item.DoktorId] = hash;
+                        else
+                            kontrol.Add(item.DoktorId, hash);
+                        #endregion
                     }
 
                     #endregion
@@ -124,11 +162,10 @@ namespace MonitorYonetimi
 
                     Thread.Sleep((int)numericUpDown1.Value * 1000);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     Logger("Sorgulama yapılamadı. Bir sorun oluştu..");
                 }
-
             }
 
             StatusUpdate("Durduruldu");
@@ -148,7 +185,7 @@ namespace MonitorYonetimi
 
         private void bDatabase_Click(object sender, EventArgs e)
         {
-            fDatabase f = new fDatabase();
+            fParameters f = new fParameters();
             f.ShowDialog();
         }
 
@@ -162,12 +199,11 @@ namespace MonitorYonetimi
         {
             numericUpDown1.Enabled = false;
 
-            _hastaGizli = DBManager.Instance.GetPref("HASTA_GIZLI") == "on";
-            if (_hastaGizli)
-                Logger("Hasta adı gizli şekilde ekranlara yansıtılacaktır.");
-
             if (_IsRunning == false)
             {
+                kontrol.Clear();
+                LoadDefinitions();
+
                 _IsRunning = true;
                 mesajGonder();
                 StatusUpdate("Başlatılıyor..");
@@ -238,5 +274,16 @@ namespace MonitorYonetimi
             }
             return hash;
         }
+
+        void LoadDefinitions()
+        {
+            doktorListesi = DBManager.Instance.DoktorList();
+            _genelMesaj = DBManager.Instance.GetPref("GENEL_MESAJ");
+            _hastaGizli = DBManager.Instance.GetPref("HASTA_GIZLI") == "on";
+            if (_hastaGizli)
+                Logger("Hasta adı gizli şekilde ekranlara yansıtılacaktır.");
+        }
+
+
     }
 }

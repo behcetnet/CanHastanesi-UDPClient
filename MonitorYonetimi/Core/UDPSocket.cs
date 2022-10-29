@@ -28,7 +28,7 @@ namespace MusteriYonetimi.Core
         public void Client(string address, int port)
         {
             _socket.Connect(IPAddress.Parse(address), port);
-            Receive();
+            //Receive();
         }
 
         public void Send(string text)
