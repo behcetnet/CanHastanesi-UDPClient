@@ -50,7 +50,6 @@ namespace MonitorYonetimi
                 /** timer işlemi için **/
                 try
                 {
-
                     #region UDP için işlemler
 
                     int Port = 4445;
@@ -59,63 +58,63 @@ namespace MonitorYonetimi
                     var muayeneListesi = SQLManager.MuayeneList();
 
                     UDPSocket c;
+                    string bolumAdi = "";
+                    string doktorAdi = "";
                     string hastaAdi = "";
-                    foreach (var item in muayeneListesi)
+                    string muayeneSira = "";
+                    string ekMesaj = "";
+
+                    foreach (var item in doktorListesi)
                     {
-                        var _ipQuery = doktorListesi
-                                            .Where(t => t.DoktorId == item.DoktorId)
-                                            .FirstOrDefault();
-
-                        if (_ipQuery == null)
+                        // IP kaydı yoksa cihaz es geçilir.
+                        if (string.IsNullOrEmpty(item.IP))
                             continue;
 
-                        if (string.IsNullOrEmpty(_ipQuery.IP))
-                            continue;
+                        var muayene = muayeneListesi
+                                           .Where(t => t.DoktorId == item.DoktorId)
+                                           .FirstOrDefault();
 
+                        bolumAdi = item.BolumAdi;
+                        doktorAdi = item.DoktorAdi;
                         hastaAdi = "";
-                        if (_hastaGizli)
+                        muayeneSira = "";
+
+                        if (muayene != null)
                         {
-                            int i = 0;
-                            foreach (Char nm in item.HastaAdi.ToCharArray())
+                            hastaAdi = "";
+                            if (_hastaGizli)
                             {
-                                if (Char.IsWhiteSpace(nm))
+                                int i = 0;
+                                foreach (Char nm in muayene.HastaAdi.ToCharArray())
                                 {
-                                    hastaAdi += " ";
-                                    i = 0;
-                                }
-                                else
-                                {
-                                    hastaAdi += (i == 0) ? nm : '*';
-                                    i++;
+                                    if (Char.IsWhiteSpace(nm))
+                                    {
+                                        hastaAdi += " ";
+                                        i = 0;
+                                    }
+                                    else
+                                    {
+                                        hastaAdi += (i == 0) ? nm : '*';
+                                        i++;
+                                    }
                                 }
                             }
+                            else
+                            {
+                                hastaAdi = muayene.HastaAdi;
+                            }
+
+                            muayeneSira = muayene.SiraNo.ToString();
                         }
-                        else
-                        {
-                            hastaAdi = item.HastaAdi;
-                        }
 
-                        String mesaj = String.Format("B;;{0};;{1};;{2};;{3};;E",
-                            item.PolkAdi, item.DoktorAdi, hastaAdi, ""); //item.SiraNo
-
-                        // string hash = sha256(mesaj);
-
-                        //bool bExists = keyValuePairs.TryGetValue(item.DoktorId, out string _vk);
-                        //if (bExists)
-                        //{
-                        //    if (_vk == hash) continue;
-                        //}
+                        string mesaj = String.Format("B;;{0};;{1};;{2};;SIRA NO: {3};;{4};E",
+                            bolumAdi, doktorAdi, hastaAdi, muayeneSira, ekMesaj);
 
                         c = new UDPSocket();
-                        c.Client(_ipQuery.IP, Port);
+                        c.Client(item.IP, Port);
 
                         // Mesaj hazırlanacak...
                         c.Send(mesaj);
-
-                        //if (bExists)
-                        //    keyValuePairs.Remove(item.DoktorId);
-
-                        //keyValuePairs.Add(item.DoktorId, hash);
                     }
 
                     #endregion

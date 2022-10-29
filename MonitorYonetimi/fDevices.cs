@@ -92,8 +92,12 @@ namespace MonitorYonetimi
                     if (item.Cells[1].Value != null)
                         _doktorAdi = item.Cells[1].Value.ToString();
 
-                    string _IPAdres = "";
+                    string _bolumAdi = "";
                     if (item.Cells[2].Value != null)
+                        _bolumAdi = item.Cells[1].Value.ToString();
+
+                    string _IPAdres = "";
+                    if (item.Cells[3].Value != null)
                         _IPAdres = item.Cells[2].Value.ToString();
 
                     if (string.IsNullOrEmpty(_doktorId))
@@ -107,7 +111,7 @@ namespace MonitorYonetimi
                         if (string.IsNullOrEmpty(_IPAdres))
                             _IPAdres = "";
 
-                        DBManager.Instance.DoktorKayit(_did, _doktorAdi, _IPAdres);
+                        DBManager.Instance.DoktorKayit(_did, _doktorAdi, _bolumAdi, _IPAdres);
                     }
                 }
 

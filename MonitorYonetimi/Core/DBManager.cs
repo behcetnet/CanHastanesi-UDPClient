@@ -101,7 +101,7 @@ namespace MonitorYonetimi.Core
                 connection.Open();
 
             var command = connection.CreateCommand();
-            command.CommandText = "SELECT DoktorId, DoktorAdi, IPAdres FROM DoktorMap ORDER BY DoktorId ASC";
+            command.CommandText = "SELECT DoktorId, DoktorAdi, BolumAdi, IPAdres FROM DoktorMap ORDER BY DoktorId ASC";
 
             List<Doktor> list = new List<Doktor>();
 
@@ -111,7 +111,7 @@ namespace MonitorYonetimi.Core
                 while (reader.Read())
                 {
                     list.Add(
-                        Doktor.Make(reader.GetInt32(0), reader.GetString(1), reader.GetString(2))
+                        Doktor.Make(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3))
                         );
                 }
             }
@@ -130,15 +130,16 @@ namespace MonitorYonetimi.Core
             command.ExecuteNonQuery();
         }
 
-        public void DoktorKayit(int DoktorId, string DoktorAdi, string Ip)
+        public void DoktorKayit(int DoktorId, string DoktorAdi, string BolumAdi, string Ip)
         {
             if (connection.State != System.Data.ConnectionState.Open)
                 connection.Open();
 
             var command = connection.CreateCommand();
-            command.CommandText = "INSERT INTO DoktorMap (DoktorId, DoktorAdi, IPAdres) VALUES (@Id, @Adi, @Ip)";
+            command.CommandText = "INSERT INTO DoktorMap (DoktorId, DoktorAdi, BolumAdi, IPAdres) VALUES (@Id, @Adi, @Bolum, @Ip)";
             command.Parameters.AddWithValue("@Id", DoktorId);
             command.Parameters.AddWithValue("@Adi", DoktorAdi);
+            command.Parameters.AddWithValue("@Bolum", BolumAdi);
             command.Parameters.AddWithValue("@Ip", Ip);
 
             command.ExecuteNonQuery();

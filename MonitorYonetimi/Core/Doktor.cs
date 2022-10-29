@@ -9,13 +9,15 @@ namespace MonitorYonetimi.Core
         [Key]
         public int DoktorId { get; set; }
         public string DoktorAdi { get; set; }
+        public string BolumAdi { get; set; }
         public string IP { get; set; }
 
-        public static Doktor Make(int _id, string _adi, string _ip)
+        public static Doktor Make(int _id, string _adi, string _bolum, string _ip)
         {
             Doktor d = new Doktor();
             d.DoktorId = _id;
             d.DoktorAdi = _adi;
+            d.BolumAdi = _bolum;
             d.IP = _ip;
 
             return d;

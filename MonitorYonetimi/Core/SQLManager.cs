@@ -35,9 +35,10 @@ namespace MonitorYonetimi.Core
                 {
                     int i1 = reader.GetOrdinal("DoktorId");
                     int i2 = reader.GetOrdinal("DoktorAdi");
+                    int i3 = reader.GetOrdinal("BolumAdi");
 
                     liste.Add(Doktor.Make(
-                        reader.GetInt32(i1), reader.GetString(i2), ""
+                        reader.GetInt32(i1), reader.GetString(i2), reader.GetString(i3), ""
                         ));
                 }
                 reader.Close();
