@@ -139,7 +139,7 @@ namespace MonitorYonetimi
                                 ekMesaj = _genelMesaj;
                         }
 
-                        string mesaj = String.Format("B;;{0};;{1};;{2};;SIRA NO: {3};;{4};E",
+                        string mesaj = String.Format("B;;{0};;{1};;{2};;{3};;{4};E",
                             bolumAdi, doktorAdi, hastaAdi, muayeneSira, ekMesaj);
 
                         #region mesja tekrar kontrolü
