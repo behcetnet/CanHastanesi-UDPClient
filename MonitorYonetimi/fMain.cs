@@ -92,6 +92,16 @@ namespace MonitorYonetimi
                         hastaAdi = "";
                         muayeneSira = "";
 
+                        if (string.IsNullOrEmpty(muayene.Mesaj) == false)
+                            ekMesaj = muayene.Mesaj;
+                        else
+                        {
+                            if (string.IsNullOrEmpty(item.Detay) == false)
+                                ekMesaj = item.Detay;
+                            else
+                                ekMesaj = _genelMesaj;
+                        }
+
                         if (muayene != null)
                         {
                             hastaAdi = "";
@@ -129,7 +139,7 @@ namespace MonitorYonetimi
                                 ekMesaj = _genelMesaj;
                         }
 
-                        string mesaj = String.Format("B;;{0};;{1};;{2};;{3};;{4};;E",
+                        string mesaj = String.Format("B;;{0};;{1};;{2};;SIRA NO: {3};;{4};E",
                             bolumAdi, doktorAdi, hastaAdi, muayeneSira, ekMesaj);
 
                         #region mesja tekrar kontrolü
@@ -198,6 +208,10 @@ namespace MonitorYonetimi
         private void bStart_Click(object sender, EventArgs e)
         {
             numericUpDown1.Enabled = false;
+
+            _hastaGizli = DBManager.Instance.GetPref("HASTA_GIZLI") == "on";
+            if (_hastaGizli)
+                Logger("Hasta adı gizli şekilde ekranlara yansıtılacaktır.");
 
             if (_IsRunning == false)
             {
